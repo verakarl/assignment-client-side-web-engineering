@@ -6,17 +6,7 @@
  * - Works with positive integers ℤ+!
  * - Throws an error if exponent is invalid
  */
-export function pow(b, n) {
-  if (
-    !(
-      Object.prototype.toString.call(n) === "[object Number]" &&
-      n % 1 === 0 &&
-      n > 0
-    )
-  ) {
-    throw new Error("");
-  }
-  return Array.apply(null, { length: n - 1 }).reduce(s => s * b, b);
+export function pow() {
 }
 
 /*
@@ -26,11 +16,5 @@ export function pow(b, n) {
  * - Provides a primer for complex fields
  * - Throws an error if arguments are invalid
  */
-export function sortBy(field, primer) {
-  const key = x => (primer ? primer(x[field]) : x[field]);
-  return (a, b) => {
-    const fA = key(a);
-    const fB = key(b);
-    return fA < fB ? -1 : fA > fB ? 1 : 0;
-  };
+export function sortBy() {
 }

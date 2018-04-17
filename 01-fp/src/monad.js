@@ -20,23 +20,4 @@
  *   .fadeOut();
  */
 export function d() {
-  const prototype = {};
-  prototype.isD = true;
-
-  function create(val) {
-    const e = Object.create(prototype);
-    e.val = val;
-    e.bind = (fn, args) => fn.apply(e, args);
-    return e;
-  }
-
-  create.extend = function extend(name, fn) {
-    prototype[name] = function extended(...args) {
-      const result = this.bind(fn, args);
-      return result && result.isD ? result : create(result);
-    };
-    return create;
-  };
-
-  return create;
 }
