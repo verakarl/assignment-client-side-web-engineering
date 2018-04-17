@@ -1,18 +1,17 @@
 {
   "name": "01-fp",
   "version": "1.0.0",
-  "description": "Assignment",
-  "main": "index.js",
+  "description": "Functional programing",
   "scripts": {
-    "test": "mocha --compilers js:babel-register"
+    "test": "mocha --require babel-register"
   },
-  "author": "Hannes Moser <hannes@impossiblearts.com>",
+  "author": "Hannes Moser <hannes.moser@fh-salzburg.ac.at>",
   "license": "MIT",
   "devDependencies": {
-    "babel-cli": "^6.24.0",
-    "babel-preset-env": "^1.2.2",
-    "babel-register": "^6.24.0",
-    "mocha": "^3.2.0",
-    "should": "^11.2.1"
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-register": "^6.26.0",
+    "mocha": "^5.1.0",
+    "should": "^13.2.1"
   }
 }

@@ -1,4 +1,6 @@
-# 03-yield
+# 01-fp
+
+> Functional programing
 
 ## Setup
 
@@ -6,7 +8,7 @@
 npm install
 ```
 
-## Dev
+## Test
 
 ```bash
 npm test
