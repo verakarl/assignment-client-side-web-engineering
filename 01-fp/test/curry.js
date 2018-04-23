@@ -14,7 +14,7 @@ describe("01-fp", () => {
 
     it("should invoke currified version of binary(a, b): binary(1, 1)", () => {
       const binary = curry((a, b) => a + b);
-      binary(1,1).should.eql(2);
+      binary(1, 1).should.eql(2);
     });
 
     it("should invoke currified version of pow(x, y): pow(2)(4)", () => {
