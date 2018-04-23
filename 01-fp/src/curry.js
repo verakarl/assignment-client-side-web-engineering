@@ -16,6 +16,7 @@ export function curry(fn) {
       }
       if (level - a.length <= 0) {
         console.log("End!");
+        console.log(...args)
         return fn(...a, ...args);
       } else {
         console.log("Next Round!");
