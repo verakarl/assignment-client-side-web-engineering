@@ -10,18 +10,13 @@
 export function curry(fn) {
   function rec(level, params) {
     return (...a) => {
-      console.log("Start!");
       if (a.length === 0) {
         return fn();
       }
       if (level - a.length <= 0) {
-        console.log("End!");
-        console.log(...params);
         return fn(...a, ...params);
       } else {
-        console.log("Next Round!");
-        // return (...b) => fn.apply(this, a.concat(b));
-        return rec(level - a.length, [...params, ...a]);
+        return rec(level - a.length, params.concat(a));
       }
     };
   }
