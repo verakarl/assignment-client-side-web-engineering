@@ -1,18 +1,18 @@
 /**
- * Implement
+ * Implement a
  */
 const MATCH_ELEMENT = /<([a-z][a-z0-9]*\b[^>]*)>(.*?)<\/\1>/;
 const MATCH_VARIABLE = /^\{\{(.+)\}\}$/;
 
 function hydrateVariableNode(map, name, value) {
   if (map.has(name)) {
-    map.get(name).nodeValue = value;
+    map.get(name).textContent = value;
   }
 }
 
 function createVariableNode(map, name) {
   if (!map.has(name)) {
-    map.set(name, document.createTextNode(''));
+    map.set(name, document.createTextNode(""));
   }
   return map.get(name);
 }
@@ -26,22 +26,20 @@ function create(str) {
   // node
   const node = {};
   const nodes = new Map();
-  node.update = function (data) {
+  node.update = function(data) {
     // invoke possible nested updates
-    const r = node.update.update
+    const r = node.update.update;
     if (typeof r === "function") {
       r.apply(node, [data]);
     }
 
     // update nodes on this layer
-    Object
-      .keys(data)
-      .forEach(k => {
-        hydrateVariableNode(nodes, k, data[k])
-      });
+    Object.keys(data).forEach(k => {
+      hydrateVariableNode(nodes, k, data[k]);
+    });
 
     return node.el;
-  }
+  };
 
   // create a variable node
   if (str) {
@@ -64,16 +62,18 @@ function create(str) {
   const [match, tag, child] = result;
 
   // create node
-  const { el: cnode, update: cupdate } = create(child);
+  const { el: childNode, update: childUpdate } = create(child);
 
   node.el = document.createElement(tag);
-  node.el.appendChild(cnode);
-  node.update.update = cupdate;
+  node.el.appendChild(childNode);
+  node.update.update = childUpdate;
 
   return node;
 }
 
 export function build(template) {
-  const { update } = create(template);
-  return update
+  return data => {
+    const { update } = create(template);
+    return { el: update(data), update };
+  };
 }
