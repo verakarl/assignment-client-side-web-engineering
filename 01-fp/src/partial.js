@@ -9,4 +9,18 @@
  */
 export const _ = undefined;
 
-export function partial() {}
+export function partial(fn) {
+  return function rec(...params) {
+    if (params.length === 0) {
+      return fn();
+    }
+    return (...a) => {
+      const concatenatedParams = params.concat(a);
+      const filteredParams = concatenatedParams.filter(param => param !== undefined);
+      if (concatenatedParams.length >= fn.length && !a.includes(undefined)) {
+        return fn(...filteredParams);
+      }
+      return rec(...concatenatedParams);
+    };
+  };
+}
