@@ -8,7 +8,7 @@
  * - Has auto currying after initial call
  */
 export function curry(fn) {
-  function rec(level, args) {
+  function rec(level, params) {
     return (...a) => {
       console.log("Start!");
       if (a.length === 0) {
@@ -16,12 +16,12 @@ export function curry(fn) {
       }
       if (level - a.length <= 0) {
         console.log("End!");
-        console.log(...args)
-        return fn(...a, ...args);
+        console.log(...params);
+        return fn(...a, ...params);
       } else {
         console.log("Next Round!");
         // return (...b) => fn.apply(this, a.concat(b));
-        return rec(level - a.length, [...args, ...a]);
+        return rec(level - a.length, [...params, ...a]);
       }
     };
   }
