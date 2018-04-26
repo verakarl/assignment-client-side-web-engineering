@@ -13,11 +13,7 @@ export function curry(fn) {
       if (a.length === 0) {
         return fn();
       }
-      if (level - a.length <= 0) {
-        return fn(...a, ...params);
-      } else {
-        return rec(level - a.length, params.concat(a));
-      }
+      return level - a.length <= 0 ? fn(...a, ...params) : rec(level - a.length, params.concat(a));
     };
   }
   return rec(fn.length, []);
