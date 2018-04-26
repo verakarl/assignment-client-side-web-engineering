@@ -19,32 +19,23 @@
  *   .style({ color: "red" })
  *   .fadeOut();
  */
- class Monad {
-    static get [Symbol.species]() {
-      console.log(this)
-      return this;
-    }
-
-    constructor(...extensions) {
-      this.extensions = this.extensions;
-    }
-
-   extend(name, fn) {
-    // name style --> function 
-    console.log(name, fn);
-    console.log(this.extensions);
-    this.extensions[name] = fn;
-    console.log(this.constructor)
-    // return this.constructor;
-    const This = this.constructor[Symbol.species]; // function Monad
-    return new This(name, fn);
-   }
- }
-
+// inspired by https://www.youtube.com/watch?v=b0EF0VTs9Dc
 export function d() {
-  return new Monad({});
+  // constructor function 
+  const prototype = Object.create(null);
+  // unit function
+  const monad = a => {
+    const instance = Object.create(prototype);
+    // bind function
+    instance.bind = (fn, args) => fn(a, ...args);
+    return instance;
+  };
+  // lift / extend  function 
+  monad.extend = (name, fn) => {
+    prototype[name] = (...args) => {
+      return monad(this.bind(fn, args));
+    };
+    return monad;
+  };
+  return monad;
 }
-
-// lift - which converts a ‘simple’ function into a debuggable function
-// bind - which converts a debuggable function into a composable form
-// unit - which converts a simple value into the format required for debugging, by placing it in a containe
