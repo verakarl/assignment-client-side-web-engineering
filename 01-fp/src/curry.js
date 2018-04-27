@@ -7,7 +7,7 @@
  * - `curry` is a pure function!
  * - Has auto currying after initial call
  */
-export function curry(fn) {
+export function curry(fn, numArgs = fn.length) {
   function rec(level, params) {
     return (...a) => {
       if (a.length === 0) {
@@ -16,7 +16,7 @@ export function curry(fn) {
       return level - a.length <= 0 ? fn(...a, ...params) : rec(level - a.length, params.concat(a));
     };
   }
-  return rec(fn.length, []);
+  return rec(numArgs, []);
 }
 
 

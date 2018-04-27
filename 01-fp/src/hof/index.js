@@ -11,6 +11,10 @@ export function pow(base, exponent) {
   return new Array(exponent).fill(base)
   .reduce((acc, currentValue) => acc *= currentValue);
 }
+
+
+// in JS viele Wege um Herauszufinden welcher Typ das ist etc.
+
 /*
  * Implement a sortBy function that is capable of sorting any field within the
  * set "data.json".

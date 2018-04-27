@@ -17,7 +17,7 @@ export function partial(fn) {
     return (...a) => {
       const concatenatedParams = params.concat(a);
       const filteredParams = concatenatedParams.filter(param => param !== undefined);
-      if (concatenatedParams.length >= fn.length && !a.includes(undefined)) {
+      if (concatenatedParams.length >= fn.length && !a.includes(_)) {
         return fn(...filteredParams);
       }
       return rec(...concatenatedParams);
