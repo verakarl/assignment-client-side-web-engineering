@@ -1,4 +1,4 @@
-import { WSAENAMETOOLONG } from "constants";
+import { Z_DEFAULT_STRATEGY } from 'zlib';
 
 /*
  * Implement a view engine:
@@ -28,18 +28,22 @@ const MATCH_VARIABLE = /^\{\{(.+)\}\}$/;
 //   nodeMap.get(variableName);
 // }
 
-// // const template = '<h1>{{title}}</h1><h2>Subline</h2>';
+// function detectNodeType(node) {
+
+// }
+
+// const template = '<h1>{{title}}</h1><h2>Subline</h2>';
 // let nodeMap = new Map();
-// do { 
-//   let [match, tag, variable] = MATCH_ELEMENT.exec(template);
-//   let [input, name] = MATCH_VARIABLE.exec(variable);
-//   if (name) {
-//     mapLookUp(nodeMap, name);
-//     console.log(nodeMap);
-//     // createNode
-//     // build(template);
-//   }
-// } while (tag)
+// do {
+// 	let [ match, tag, variable ] = MATCH_ELEMENT.exec(template);
+// 	let [ input, name ] = MATCH_VARIABLE.exec(variable);
+// 	if (name) {
+// 		// mapLookUp(nodeMap, name);
+// 		console.log(nodeMap);
+// 		// createNode
+// 		// build(template);
+// 	}
+// } while (tag);
 
 // function createNode(tag) {
 //   let node = {};
@@ -50,10 +54,10 @@ const MATCH_VARIABLE = /^\{\{(.+)\}\}$/;
 // }
 
 // function createElementInTree(val) {
-//   let { 
-//     match, 
-//     tag, 
-//     child 
+//   let {
+//     match,
+//     tag,
+//     child
 //   } = template.match(MATCH_ELEMENT);
 
 //    if (match === null) {
@@ -63,7 +67,6 @@ const MATCH_VARIABLE = /^\{\{(.+)\}\}$/;
 //      tag = MATCH_ELEMENT.exec(template);
 //      console.log(tag);
 //      if (tag) {
-   
 
 //        return node;
 //        // createNode
@@ -85,35 +88,37 @@ const MATCH_VARIABLE = /^\{\{(.+)\}\}$/;
 // }
 
 export function build(template) {
-  return html => {
-    // let nodeMap = new Map();
-    //   let [match, tag, variable] = MATCH_ELEMENT.exec(template);
-    //   let [input, name] = MATCH_VARIABLE.exec(variable);
-    //   if (name) {
-    //     mapLookUp(nodeMap, name);
-    //     console.log(nodeMap);
-    //     // createNode
-    //     // build(template);
-    //   }
-    // createElementInTree(html)
-    console.log(template)
-    console.log('HTML', html);
-    return template
-  }
+	return obj => {
+    let nodeMap = new Map();
+    for (let prop in obj) {
+      nodeMap.set(prop, obj[prop]);
+    }
+    // console.log(nodeMap)
+
+		// console.log(nodeMap, variableName)
+		// do {
+    // nodeMap.set(variable);
+
+		let node;
+		let [ match, tag, variable ] = MATCH_ELEMENT.exec(template);
+		let [ input, name ] = MATCH_VARIABLE.exec(variable);
+		if (tag) {
+      node = document.createElement(tag);
+      // nodeMap.get(name);
+      let text = document.createTextNode(nodeMap.get(name));
+      node.appendChild(text);
+      console.log(tag)
+			// mapLookUp(nodeMap, name);
+			//console.log(nodeMap);
+			// createNode
+			// build(template);
+			// }
+			// } while (tag)
+			// detectNodeType(node)
+			// createDOM()
+			// console.log(template);
+			// console.log(obj);
+			return {el: node};
+		}
+	};
 }
-
-// template + update function soll returniert werden (zweiter durchgang schneller als erster)
-// reskursiver aufruf (nodes von außen nach innen geparst und äußerstes zurück geben)
-// update triggert update von innerem node usw..
-// in der update function muss man wissen welche knoten upgedatet werden
-// liste von variablen muss gehalten werden
-// Flow: update -> variable --> schau in dom tree wo die variable is -> und update dann wo es vorkommt (Map, referenz auf node der sowieso schon erzeugt wird wird gespeichert, Key der Map ist variablenname)
-
-// str.match(MATCH_VARIABLE) -> create Variable Node
-// wenn string --> und {} enthält  = textnode variable
-// speicher in aktuellen node 
-
-
-// wenn str.match(MATCH_ELEMENT) == null dann ist es textnode (update ist nicht notwendig weil statisch)
-
-// hydrate() -> ersetze variable durch text 
