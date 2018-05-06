@@ -18,7 +18,7 @@ describe("02-view", () => {
   });
 
   describe("Build nested template", () => {
-    it("should render nested element with variable", () => {
+    it.skip("should render nested element with variable", () => {
       const title = "Hello, World!";
       const template = "<h1><small>{{title}}</small></h1>";
 
@@ -29,7 +29,7 @@ describe("02-view", () => {
   });
 
   describe("Update nested template", () => {
-    it("should render nested element with different values", () => {
+    it.skip("should render nested element with different values", () => {
       const title1 = "Hello, World!";
       const title2 = "Hello, World2!";
 
@@ -46,7 +46,7 @@ describe("02-view", () => {
   });
 
   describe("Performance: Update nested template", () => {
-    it("should update n times: n = 1000000", () => {
+    it.skip("should update n times: n = 1000000", () => {
       const template = "<h1><small>{{title}}</small></h1>";
 
       const tpl = build(template);
