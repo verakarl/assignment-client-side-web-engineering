@@ -29,7 +29,7 @@ describe("02-view", () => {
   });
 
   describe("Update nested template", () => {
-    it.skip("should render nested element with different values", () => {
+    it("should render nested element with different values", () => {
       const title1 = "Hello, World!";
       const title2 = "Hello, World2!";
 
