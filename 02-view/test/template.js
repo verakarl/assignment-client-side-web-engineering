@@ -18,7 +18,7 @@ describe("02-view", () => {
   });
 
   describe("Build nested template", () => {
-    it.skip("should render nested element with variable", () => {
+    it("should render nested element with variable", () => {
       const title = "Hello, World!";
       const template = "<h1><small>{{title}}</small></h1>";
 
