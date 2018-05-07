@@ -14,6 +14,7 @@
  * el.outerHTML // <h1>Hallo, Welt!</h1>
  */
 
+
 let dom;
 function createElement(nodeMap, template) {
 	const MATCH_ELEMENT = /<([a-z][a-z0-9]*\b[^>]*)>(.*?)<\/\1>/g;
@@ -38,14 +39,21 @@ function createElement(nodeMap, template) {
 					for (let prop in obj) {
 						nodeMap.set(prop, obj[prop]);
           }
-          console.log(obj["title"]);
-          dom.children[0].innerText = obj['title'];
-          console.log(dom.children[0].innerText);
+          dom.children[0].textContent = obj.title;
 				}
 			};
     }
+
     dom = node;
-		return { el: dom, update: (newValue) => console.log(newValue) };
+		return { 
+      el: dom,
+      update: (obj) => {
+        for (let prop in obj) {
+        	nodeMap.set(prop, obj[prop]);
+        }
+        dom.children[0].textContent = obj.title;
+      }
+    };
 	}
 }
 
@@ -56,5 +64,6 @@ export function build(template) {
 			nodeMap.set(prop, obj[prop]);
 		}
 		return createElement(nodeMap, template);
-	};
+  };
+  
 }
