@@ -14,7 +14,6 @@
  * el.outerHTML // <h1>Hallo, Welt!</h1>
  */
 
-
 let dom;
 function createElement(nodeMap, template) {
 	const MATCH_ELEMENT = /<([a-z][a-z0-9]*\b[^>]*)>(.*?)<\/\1>/g;
@@ -46,7 +45,7 @@ function createElement(nodeMap, template) {
 
 const update = (obj) => {
   for (let prop in obj) {
-    dom.children[0].textContent = obj[prop];
+    dom.firstChild.textContent = obj[prop];
   }
 }
 
