@@ -33,28 +33,21 @@ function createElement(nodeMap, template) {
 
 		if (dom) {
 			dom.appendChild(node);
-			return {
-				el: dom,
-				update: (obj) => {
-					for (let prop in obj) {
-						nodeMap.set(prop, obj[prop]);
-          }
-          dom.children[0].textContent = obj.title;
-				}
-			};
+    } else {
+      dom = node;
     }
 
-    dom = node;
 		return { 
       el: dom,
-      update: (obj) => {
-        for (let prop in obj) {
-        	nodeMap.set(prop, obj[prop]);
-        }
-        dom.children[0].textContent = obj.title;
-      }
+      update
     };
 	}
+}
+
+const update = (obj) => {
+  for (let prop in obj) {
+    dom.children[0].textContent = obj[prop];
+  }
 }
 
 export function build(template) {
