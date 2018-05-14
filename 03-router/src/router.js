@@ -28,3 +28,13 @@
  * Start:
  * - page()
  */
+
+ export function createRouter() {
+   return function router(params) {
+     let window = params.window
+     let document = window.document;
+     let history = window.history;
+
+     router.error = new Error('test');
+   }
+ }
