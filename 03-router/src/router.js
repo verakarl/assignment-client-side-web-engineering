@@ -41,20 +41,27 @@ export function createRouter() {
     history = window.history;
   }
 
-  const router = (path, callback) => {
-    typeof path === "object" ? init(path) : console.log("not init");
-    if (path === "/" || path === "home") {
+  const addRouteToRouter = (path, cb) => {
+    routes.some(route => route.path === path) ? console.log("route already saved") : routes.push({path});
+    console.log(routes)
+    if (path === "/") {
       router.current = HOME;
+      console.log('case1')
     }
-    console.log(path === "/");
+    else if (path === "/home") {
+      router.current = '/home'
+      console.log('case2')
+    }
+  }
+
+  const router = (path, callback) => {
+    typeof path === 'object' ? init(path) : addRouteToRouter(path, callback);
   };
 
   router.error = new Error();
-  // console.log(router);
-
-  // router.error = new Error('test');
-  //    router.current = '/';
-   return router;
+  console.log(routes);
+  
+  return router;
  }
 
 // inspired by page.js
