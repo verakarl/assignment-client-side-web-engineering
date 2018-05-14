@@ -28,13 +28,33 @@
  * Start:
  * - page()
  */
+const WILDCARD = '*';
+const HOME = '/';
 
- export function createRouter() {
-   return function router(params) {
-     let window = params.window
-     let document = window.document;
-     let history = window.history;
+export function createRouter() {
+  let window, history, document; 
+  const routes = [];
 
-     router.error = new Error('test');
-   }
+  const init = params => {
+    window = params.window
+    document = window.document;
+    history = window.history;
+  }
+
+  const router = (path, callback) => {
+    typeof path === "object" ? init(path) : console.log("not init");
+    if (path === "/" || path === "home") {
+      router.current = HOME;
+    }
+    console.log(path === "/");
+  };
+
+  router.error = new Error();
+  // console.log(router);
+
+  // router.error = new Error('test');
+  //    router.current = '/';
+   return router;
  }
+
+// inspired by page.js
