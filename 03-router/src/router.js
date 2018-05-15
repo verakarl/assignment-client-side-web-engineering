@@ -32,36 +32,47 @@ const WILDCARD = '*';
 const HOME = '/';
 
 export function createRouter() {
-  let window, history, document; 
-  const routes = [];
+	let window, history, document;
+	const routes = [];
 
-  const init = params => {
-    window = params.window
-    document = window.document;
-    history = window.history;
-  }
+	const init = (params) => {
+		window = params.window;
+		document = window.document;
+		history = window.history;
 
-  const addRouteToRouter = (path, cb) => {
-    routes.some(route => route.path === path) ? console.log("route already saved") : routes.push({path});
-    console.log(routes)
-    if (path === "/") {
-      router.current = HOME;
-      console.log('case1')
-    }
-    else if (path === "/home") {
-      router.current = '/home'
-      console.log('case2')
-    }
-  }
+		window.addEventListener('popstate', onPopState, false);
 
-  const router = (path, callback) => {
-    typeof path === 'object' ? init(path) : addRouteToRouter(path, callback);
-  };
+		function onPopState(e) {
+			const { pathname } = document.location;
+			routes.forEach((route) => {
+				if (route.path === pathname) {
+          router.current = pathname;
+          route.callback();
+				}
+			});
+		}
+	};
 
-  router.error = new Error();
-  console.log(routes);
-  
-  return router;
- }
+	const addRouteToRouter = (path, callback) => {
+		routes.some((route) => route.path === path)
+			? console.log('route already saved')
+			: routes.push({ path, callback });
+		router.current = path;
+	};
+
+	const router = (route, callback) => {
+		typeof route === 'object' ? init(route) : addRouteToRouter(route, callback);
+	};
+
+	router.error = new Error();
+	router.current = '/';
+	return router;
+}
 
 // inspired by page.js
+
+// reagieren auf onpopstate, router nocheinmal initialisieren und route nochmal rein. event.preventDefault()
+
+// link, click und start
+
+// document.location.pathnam (Stringvergleich)
