@@ -45,19 +45,36 @@ export function createRouter() {
 		function onPopState(e) {
 			const { pathname } = document.location;
 			routes.forEach((route) => {
-				if (route.path === pathname) {
-          router.current = pathname;
+        const result = pathname.match(route.regex);
+        if (result !== null) {
+          router.current = route.path;
           route.callback();
-				}
+        }
 			});
 		}
 	};
 
 	const addRouteToRouter = (path, callback) => {
-		routes.some((route) => route.path === path)
-			? console.log('route already saved')
-			: routes.push({ path, callback });
-		router.current = path;
+		const isInside = routes.some((route) => route.path === path);
+		if (!isInside) {
+      const pathParts = path.split('/').slice(1);
+      let regex = '';
+			pathParts.forEach((part) => {
+        if (part.charAt(0) === ':'){
+          regex += '/?(.*)';
+        } else {
+          regex += `/${part}`;
+        }
+      });
+
+			routes.push({
+        path,
+        regex,
+				callback
+			});
+		}
+
+		// router.current = path;
 	};
 
 	const router = (route, callback) => {

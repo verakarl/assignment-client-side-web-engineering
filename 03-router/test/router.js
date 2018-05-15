@@ -82,7 +82,7 @@ describe("03-router", () => {
   });
 
   describe("dynamic", () => {
-    it.skip("should create and start router with dynamic route: /users/:id",
+    it("should create and start router with dynamic route: /users/:id",
       () => {
         const { dom, window } = createWindow({
           url: `${BASE_URL}/`
@@ -97,7 +97,7 @@ describe("03-router", () => {
       }
     );
 
-    it.skip("should create and start router with dynamic route: /users/:id/tasks/:taskid", () => {
+    it("should create and start router with dynamic route: /users/:id/tasks/:taskid", () => {
       const { dom, window } = createWindow({
         url: `${BASE_URL}/`
       });
@@ -110,7 +110,7 @@ describe("03-router", () => {
       router.current.should.eql("/users/:userid/tasks/:taskid");
     });
 
-    it.skip("should invoke function for: /users/:userid/tasks/:taskid", done => {
+    it("should invoke function for: /users/:userid/tasks/:taskid", done => {
       const { dom, window } = createWindow({ url: `${BASE_URL}/` });
 
       const router = createRouter();
