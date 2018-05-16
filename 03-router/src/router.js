@@ -43,10 +43,13 @@ export function createRouter() {
 		window.addEventListener('popstate', onPopState, false);
 
 		function onPopState(e) {
-			const { pathname } = document.location;
+      const { pathname } = document.location;
 			routes.forEach((route) => {
         const result = pathname.match(route.regex);
         if (result !== null) {
+          if (result == WILDCARD) {
+            router.current = WILDCARD;
+          }
           router.current = route.path;
           route.callback();
         }
@@ -75,10 +78,11 @@ export function createRouter() {
         regex: createDynamicRegex(path),
 				callback
 			});
-		}
+    }
 	};
 
 	const router = (route, callback) => {
+    // if(typeof callback === "string") {} router.current = callback
 		typeof route === 'object' ? init(route) : addRouteToRouter(route, callback);
 	};
 

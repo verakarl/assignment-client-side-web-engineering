@@ -135,7 +135,7 @@ describe("03-router", () => {
   });
 
   describe("catch all", () => {
-    it.skip("should catch location /home", done => {
+    it("should catch location /home", done => {
       const { dom, window } = createWindow({ url: `${BASE_URL}/` });
 
       const router = createRouter();
