@@ -33,7 +33,7 @@ const HOME = '/';
 
 export function createRouter() {
 	let window, history, document;
-	const routes = [];
+  const routes = [];
 
 	const init = (params) => {
 		window = params.window;
@@ -52,29 +52,30 @@ export function createRouter() {
         }
 			});
 		}
-	};
+  };
+  
+  const createDynamicRegex = path => {
+    const pathParts = path.split('/').slice(1);
+    let regex = '';
+    pathParts.forEach((part) => {
+      if (part.charAt(0) === ':') {
+        regex += '/?(.*)';
+      } else {
+        regex += `/${part}`;
+      }
+    });
+    return regex;
+  }
 
 	const addRouteToRouter = (path, callback) => {
 		const isInside = routes.some((route) => route.path === path);
 		if (!isInside) {
-      const pathParts = path.split('/').slice(1);
-      let regex = '';
-			pathParts.forEach((part) => {
-        if (part.charAt(0) === ':'){
-          regex += '/?(.*)';
-        } else {
-          regex += `/${part}`;
-        }
-      });
-
 			routes.push({
         path,
-        regex,
+        regex: createDynamicRegex(path),
 				callback
 			});
 		}
-
-		// router.current = path;
 	};
 
 	const router = (route, callback) => {
@@ -82,7 +83,7 @@ export function createRouter() {
 	};
 
 	router.error = new Error();
-	router.current = '/';
+  router.current = '/';
 	return router;
 }
 
