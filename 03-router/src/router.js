@@ -33,7 +33,7 @@ const HOME = '/';
 
 export function createRouter() {
 	let window, history, document;
-  const routes = [];
+	const routes = [];
 
 	const init = (params) => {
 		window = params.window;
@@ -43,51 +43,64 @@ export function createRouter() {
 		window.addEventListener('popstate', onPopState, false);
 
 		function onPopState(e) {
-      const { pathname } = document.location;
+			const { pathname } = document.location;
 			routes.forEach((route) => {
-        const result = pathname.match(route.regex);
+				const result = pathname.match(route.regex);
+
         if (result !== null) {
-          if (result == WILDCARD) {
-            router.current = WILDCARD;
-          }
+          const paramValues = result.slice(1, result.length);
+
+					if (result == WILDCARD) {
+						router.current = WILDCARD;
+					}
+          const params = {};
+
+					paramValues.forEach((value, idx) => {
+            params[route.params[idx]] = value;
+					});
+
           router.current = route.path;
-          route.callback();
-        }
+          route.callback({ params });
+				}
 			});
 		}
-  };
-  
-  const createDynamicRegex = path => {
-    const pathParts = path.split('/').slice(1);
-    let regex = '';
-    pathParts.forEach((part) => {
-      if (part.charAt(0) === ':') {
-        regex += '/?(.*)';
-      } else {
-        regex += `/${part}`;
-      }
-    });
-    return regex;
-  }
+	};
+
+	const createDynamicRegex = (path) => {
+		const pathParts = path.split('/').slice(1);
+		const params = [];
+		let regex = '';
+		pathParts.forEach((part) => {
+			if (part.charAt(0) === ':') {
+				regex += '/?(.*)';
+				params.push(part.substr(1));
+			} else {
+				regex += `/${part}`;
+			}
+		});
+		return { regex, params };
+	};
 
 	const addRouteToRouter = (path, callback) => {
 		const isInside = routes.some((route) => route.path === path);
+		const routeDetails = createDynamicRegex(path);
 		if (!isInside) {
 			routes.push({
-        path,
-        regex: createDynamicRegex(path),
+				path,
+				regex: routeDetails.regex,
+				params: routeDetails.params,
 				callback
 			});
-    }
+		}
 	};
 
 	const router = (route, callback) => {
-    // if(typeof callback === "string") {} router.current = callback
+		// if(typeof callback === "string") {} router.current = callback
 		typeof route === 'object' ? init(route) : addRouteToRouter(route, callback);
 	};
 
 	router.error = new Error();
-  router.current = '/';
+	router.current = '/';
 	return router;
 }
 

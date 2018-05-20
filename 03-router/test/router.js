@@ -120,7 +120,7 @@ describe("03-router", () => {
       changeLocation(dom, `${BASE_URL}/users/1/tasks/1`);
     });
 
-    it.skip("should check param value in context:: /users/:userid → 1", done => {
+    it("should check param value in context:: /users/:userid → 1", done => {
       const { dom, window } = createWindow({ url: `${BASE_URL}/` });
 
       const router = createRouter();
