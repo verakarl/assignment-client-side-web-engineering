@@ -30,6 +30,7 @@
  */
 const WILDCARD = '*';
 const HOME = '/';
+const linkSplit = /^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)\/)([\w\-\.]+[^#?\s]+)(.)?(#[\w\-]+)?$/;
 
 export function createRouter() {
 	let window, history, document;
@@ -38,32 +39,46 @@ export function createRouter() {
 	const init = (params) => {
 		window = params.window;
 		document = window.document;
-		history = window.history;
-
-		window.addEventListener('popstate', onPopState, false);
+    history = window.history;
+    
+    window.addEventListener('popstate', onPopState, false);
+    window.addEventListener('click', onClick, false);
 
 		function onPopState(e) {
 			const { pathname } = document.location;
-			routes.forEach((route) => {
-				const result = pathname.match(route.regex);
+			routeTo(pathname);
+    }
+    
+    function onClick(e) {
+      const links = window.document.links;
+      for (let key in links) {
+        if (links[key].id === e.target.id && !e.target.download && !e.target.rel && !e.target.target && e.target.hostname === document.location.hostname) {
+          routeTo(e.target.pathname);
+        }
+      }
+    }
+	};
 
-        if (result !== null) {
-          const paramValues = result.slice(1, result.length);
+	const routeTo = (pathname) => {
+		routes.forEach((route) => {
+			const result = pathname.match(route.regex);
 
-					if (result == WILDCARD) {
-						router.current = WILDCARD;
-					}
-          const params = {};
+			if (result !== null) {
+				const paramValues = result.slice(1, result.length);
 
-					paramValues.forEach((value, idx) => {
-            params[route.params[idx]] = value;
-					});
-
-          router.current = route.path;
-          route.callback({ params });
+				if (result == WILDCARD) {
+					router.current = WILDCARD;
 				}
-			});
-		}
+				const params = {};
+
+				paramValues.forEach((value, idx) => {
+					params[route.params[idx]] = value;
+				});
+
+        router.current = route.path;
+        route.callback({ params });
+			}
+    });
 	};
 
 	const createDynamicRegex = (path) => {
@@ -89,13 +104,12 @@ export function createRouter() {
 				path,
 				regex: routeDetails.regex,
 				params: routeDetails.params,
-				callback
+				callback: typeof callback === 'string' ? () => routeTo(callback) : callback
 			});
 		}
 	};
 
 	const router = (route, callback) => {
-		// if(typeof callback === "string") {} router.current = callback
 		typeof route === 'object' ? init(route) : addRouteToRouter(route, callback);
 	};
 

@@ -159,7 +159,7 @@ describe("03-router", () => {
   });
 
   describe("links", () => {
-    it.skip("should open /home on click", () => {
+    it("should open /home on click", () => {
       const { dom, window } = createWindow({ url: `${BASE_URL}/` });
 
       const router = createRouter();
@@ -171,7 +171,7 @@ describe("03-router", () => {
       router.current.should.eql("/home");
     });
 
-    it.skip("should not open /home on click", () => {
+    it("should not open /home on click", () => {
       const { dom, window } = createWindow({ url: `${BASE_URL}/` });
 
       const router = createRouter();
@@ -183,7 +183,7 @@ describe("03-router", () => {
       router.current.should.eql("/");
     });
 
-    it.skip("should not open /home on click", () => {
+    it("should not open /home on click", () => {
       const { dom, window } = createWindow({ url: `${BASE_URL}/` });
 
       const router = createRouter();
@@ -195,7 +195,7 @@ describe("03-router", () => {
       router.current.should.eql("/");
     });
 
-    it.skip("should not open /home on click", () => {
+    it("should not open /home on click", () => {
       const { dom, window } = createWindow({ url: `${BASE_URL}/` });
 
       const router = createRouter();
@@ -207,7 +207,7 @@ describe("03-router", () => {
       router.current.should.eql("/");
     });
 
-    it.skip("should not open /home on click", () => {
+    it("should not open /home on click", () => {
       const { dom, window } = createWindow({ url: `${BASE_URL}/` });
 
       const router = createRouter();
