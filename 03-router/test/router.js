@@ -221,7 +221,7 @@ describe("03-router", () => {
   });
 
   describe("history", () => {
-    it.skip("should change history", () => {
+    it("should change history", () => {
       const { dom, window } = createWindow({ url: `${BASE_URL}/` });
 
       const router = createRouter();
@@ -236,7 +236,7 @@ describe("03-router", () => {
       window.history.length.should.eql(3);
     });
 
-    it.skip("should change history and go back", () => {
+    it("should change history and go back", () => {
       const { dom, window } = createWindow({ url: `${BASE_URL}/` });
 
       const router = createRouter();

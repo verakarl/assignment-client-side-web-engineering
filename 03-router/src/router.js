@@ -39,46 +39,55 @@ export function createRouter() {
 	const init = (params) => {
 		window = params.window;
 		document = window.document;
-    history = window.history;
-    
-    window.addEventListener('popstate', onPopState, false);
-    window.addEventListener('click', onClick, false);
+		history = window.history;
+
+		window.addEventListener('popstate', onPopState, false);
+		window.addEventListener('click', onClick, false);
 
 		function onPopState(e) {
 			const { pathname } = document.location;
 			routeTo(pathname);
-    }
-    
-    function onClick(e) {
-      const links = window.document.links;
-      for (let key in links) {
-        if (links[key].id === e.target.id && !e.target.download && !e.target.rel && !e.target.target && e.target.hostname === document.location.hostname) {
-          routeTo(e.target.pathname);
-        }
-      }
-    }
+		}
+
+		function onClick(e) {
+			const links = window.document.links;
+			for (let key in links) {
+				if (
+					links[key].id === e.target.id &&
+					!e.target.download &&
+					!e.target.rel &&
+					!e.target.target &&
+					e.target.hostname === document.location.hostname
+				) {
+					routeTo(e.target.pathname);
+				}
+			}
+		}
 	};
 
 	const routeTo = (pathname) => {
 		routes.forEach((route) => {
 			const result = pathname.match(route.regex);
+			const params = {};
 
 			if (result !== null) {
 				const paramValues = result.slice(1, result.length);
-
 				if (result == WILDCARD) {
 					router.current = WILDCARD;
 				}
-				const params = {};
 
 				paramValues.forEach((value, idx) => {
 					params[route.params[idx]] = value;
 				});
 
-        router.current = route.path;
-        route.callback({ params });
+				router.current = route.path;
+
+				if (router.current !== document.location.pathname) {
+					history.pushState({}, '', route.path);
+				}
+				route.callback({ params });
 			}
-    });
+		});
 	};
 
 	const createDynamicRegex = (path) => {
@@ -117,11 +126,3 @@ export function createRouter() {
 	router.current = '/';
 	return router;
 }
-
-// inspired by page.js
-
-// reagieren auf onpopstate, router nocheinmal initialisieren und route nochmal rein. event.preventDefault()
-
-// link, click und start
-
-// document.location.pathnam (Stringvergleich)
