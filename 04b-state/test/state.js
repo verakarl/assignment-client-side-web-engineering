@@ -30,7 +30,7 @@ const mock = {
 
 describe("04-state", () => {
   describe("store", () => {
-    it("should create a store", () => {
+    it.skip("should create a store", () => {
       const store = createStore(hello);
       const methods = Object.keys(store);
 
@@ -38,19 +38,19 @@ describe("04-state", () => {
       methods.forEach(m => store[m].should.be.a.Function());
     });
 
-    it("should throw if reducer is not a function", () => {
+    it.skip("should throw if reducer is not a function", () => {
       should.throws(() => createStore());
       should.throws(() => createStore("hello"));
       should.throws(() => createStore({}));
       should.doesNotThrow(() => createStore(() => {}));
     });
 
-    it("passes the initial state", () => {
+    it.skip("passes the initial state", () => {
       const store = createStore(noop, { a: 1, b: { c: 2 } });
       store.getState().should.be.deepEqual({ a: 1, b: { c: 2 } });
     });
 
-    it("applies the reducer to the previous state", () => {
+    it.skip("applies the reducer to the previous state", () => {
       const store = createStore(todos, { todos: [] });
       store.getState().should.be.deepEqual({ todos: [] });
 
@@ -63,13 +63,17 @@ describe("04-state", () => {
         .should.be.deepEqual({ todos: [{ id: 1, text: "First" }] });
 
       store.dispatch({ type: "ADD_TODO", todo: { id: 2, text: "Second" } });
-      store.getState().should.be.deepEqual({
-        todos: [{ id: 1, text: "First" }, { id: 2, text: "Second" }]
-      });
+      store
+        .getState()
+        .should.be.deepEqual({
+          todos: [{ id: 1, text: "First" }, { id: 2, text: "Second" }]
+        });
     });
 
-    it("applies the reducer to the initial state", () => {
-      const store = createStore(todos, { todos: [{ id: 1, text: "First" }] });
+    it.skip("applies the reducer to the initial state", () => {
+      const store = createStore(todos, {
+        todos: [{ id: 1, text: "First" }]
+      });
       store
         .getState()
         .should.be.deepEqual({ todos: [{ id: 1, text: "First" }] });
@@ -80,14 +84,16 @@ describe("04-state", () => {
         .should.be.deepEqual({ todos: [{ id: 1, text: "First" }] });
 
       store.dispatch({ type: "ADD_TODO", todo: { id: 2, text: "Second" } });
-      store.getState().should.be.deepEqual({
-        todos: [{ id: 1, text: "First" }, { id: 2, text: "Second" }]
-      });
+      store
+        .getState()
+        .should.be.deepEqual({
+          todos: [{ id: 1, text: "First" }, { id: 2, text: "Second" }]
+        });
     });
   });
 
   describe("listeners", () => {
-    it("supports multiple subscriptions", () => {
+    it.skip("supports multiple subscriptions", () => {
       const store = createStore(todos);
       const listenerA = mock.fn();
       const listenerB = mock.fn();
@@ -134,7 +140,7 @@ describe("04-state", () => {
       listenerB.mock.calls.should.have.length(2);
     });
 
-    it("only removes listener once when unsubscribe is called", () => {
+    it.skip("only removes listener once when unsubscribe is called", () => {
       const store = createStore(todos);
       const listenerA = mock.fn();
       const listenerB = mock.fn();
@@ -150,7 +156,7 @@ describe("04-state", () => {
       listenerB.mock.calls.should.have.length(1);
     });
 
-    it("only removes relevant listener when unsubscribe is called", () => {
+    it.skip("only removes relevant listener when unsubscribe is called", () => {
       const store = createStore(todos);
       const listener = mock.fn();
 
@@ -164,24 +170,23 @@ describe("04-state", () => {
       listener.mock.calls.should.have.length(1);
     });
 
-    it("notifies all subscribers about current dispatch regardless if any of them gets unsubscribed in the process", () => {
+    it.skip("notifies all subscribers about current dispatch regardless if any of them gets unsubscribed in the process", () => {
       const store = createStore(todos);
 
       const unsubscribeHandles = [];
-      const doUnsubscribeAll = () =>
-        unsubscribeHandles.forEach(unsubscribe => unsubscribe());
+      const doUnsubscribeAll = () => unsubscribeHandles.forEach(
+          unsubscribe => unsubscribe()
+        );
 
       const listener1 = mock.fn();
       const listener2 = mock.fn();
       const listener3 = mock.fn();
 
       unsubscribeHandles.push(store.subscribe(() => listener1()));
-      unsubscribeHandles.push(
-        store.subscribe(() => {
+      unsubscribeHandles.push(store.subscribe(() => {
           listener2();
           doUnsubscribeAll();
-        })
-      );
+        }));
       unsubscribeHandles.push(store.subscribe(() => listener3()));
 
       store.dispatch(unknownAction());
@@ -195,7 +200,7 @@ describe("04-state", () => {
       listener3.mock.calls.should.have.length(1);
     });
 
-    it("notifies only subscribers active at the moment of current dispatch", () => {
+    it.skip("notifies only subscribers active at the moment of current dispatch", () => {
       const store = createStore(todos);
 
       const listener1 = mock.fn();
@@ -227,7 +232,7 @@ describe("04-state", () => {
       listener3.mock.calls.should.have.length(1);
     });
 
-    it("uses the last snapshot of subscribers during nested dispatch", () => {
+    it.skip("uses the last snapshot of subscribers during nested dispatch", () => {
       const store = createStore(todos);
 
       const listener1 = mock.fn();
@@ -269,21 +274,23 @@ describe("04-state", () => {
       listener4.mock.calls.should.have.length(1);
     });
 
-    it("provides an up-to-date state when a subscriber is notified", done => {
+    it.skip("provides an up-to-date state when a subscriber is notified", done => {
       const store = createStore(todos, { todos: [] });
       store.subscribe(() => {
-        store.getState().todos.should.be.deepEqual([
-          {
-            id: 1,
-            text: "Hello"
-          }
-        ]);
+        store
+          .getState()
+          .todos.should.be.deepEqual([
+            {
+              id: 1,
+              text: "Hello"
+            }
+          ]);
         done();
       });
       store.dispatch({ type: "ADD_TODO", todo: { id: 1, text: "Hello" } });
     });
 
-    it("does not leak private listeners array", done => {
+    it.skip("does not leak private listeners array", done => {
       const store = createStore(todos, { todos: [] });
       store.subscribe(function() {
         should(this).be.undefined();
@@ -294,7 +301,7 @@ describe("04-state", () => {
   });
 
   describe("actions", () => {
-    it("only accepts plain object actions", () => {
+    it.skip("only accepts plain object actions", () => {
       const store = createStore(todos);
       should.doesNotThrow(() => store.dispatch(unknownAction()));
 
@@ -306,7 +313,7 @@ describe("04-state", () => {
   });
 
   describe("dispatch", () => {
-    it("handles nested dispatches gracefully", () => {
+    it.skip("handles nested dispatches gracefully", () => {
       function foo(state = 0, action) {
         return action.type === "foo" ? 1 : state;
       }
@@ -325,15 +332,12 @@ describe("04-state", () => {
       });
 
       store.dispatch({ type: "foo" });
-      store.getState().should.be.deepEqual({
-        foo: 1,
-        bar: 2
-      });
+      store.getState().should.be.deepEqual({ foo: 1, bar: 2 });
     });
   });
 
   describe("forbidden", () => {
-    it("does not allow dispatch() from within a reducer", () => {
+    it.skip("does not allow dispatch() from within a reducer", () => {
       const store = createStore(dispatchInTheMiddleOfReducer);
 
       should.throws(() =>
@@ -343,7 +347,7 @@ describe("04-state", () => {
       );
     });
 
-    it("does not allow getState() from within a reducer", () => {
+    it.skip("does not allow getState() from within a reducer", () => {
       const store = createStore(getStateInTheMiddleOfReducer);
 
       should.throws(() =>
@@ -351,15 +355,17 @@ describe("04-state", () => {
       );
     });
 
-    it("does not allow subscribe() from within a reducer", () => {
+    it.skip("does not allow subscribe() from within a reducer", () => {
       const store = createStore(subscribeInTheMiddleOfReducer);
 
       should.throws(() =>
-        store.dispatch(subscribeInMiddle(store.subscribe.bind(store, () => {})))
+        store.dispatch(
+          subscribeInMiddle(store.subscribe.bind(store, () => {}))
+        )
       );
     });
 
-    it("does not allow unsubscribe from subscribe() from within a reducer", () => {
+    it.skip("does not allow unsubscribe from subscribe() from within a reducer", () => {
       const store = createStore(unsubscribeInTheMiddleOfReducer);
       const unsubscribe = store.subscribe(() => {});
 
@@ -369,24 +375,24 @@ describe("04-state", () => {
     });
   });
   describe("errors", () => {
-    it("recovers from an error within a reducer", () => {
+    it.skip("recovers from an error within a reducer", () => {
       const store = createStore(errorThrowingReducer);
       should.throws(() => store.dispatch(throwError()));
 
       should.throws(() => store.dispatch(unknownAction()));
     });
 
-    it("throws if action type is missing", () => {
+    it.skip("throws if action type is missing", () => {
       const store = createStore(todos);
       should.throws(() => store.dispatch({}));
     });
 
-    it("throws if action type is undefined", () => {
+    it.skip("throws if action type is undefined", () => {
       const store = createStore(todos);
       should.throws(() => store.dispatch({ type: undefined }));
     });
 
-    it("does not throw if action type is falsy", () => {
+    it.skip("does not throw if action type is falsy", () => {
       const store = createStore(todos);
       should.doesNotThrow(() => store.dispatch({ type: false }));
       should.doesNotThrow(() => store.dispatch({ type: 0 }));
