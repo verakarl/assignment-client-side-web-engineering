@@ -93,7 +93,7 @@ describe("04-state", () => {
   });
 
   describe("listeners", () => {
-    it.skip("supports multiple subscriptions", () => {
+    it("supports multiple subscriptions", () => {
       const store = createStore(todos);
       const listenerA = mock.fn();
       const listenerB = mock.fn();
@@ -140,7 +140,7 @@ describe("04-state", () => {
       listenerB.mock.calls.should.have.length(2);
     });
 
-    it.skip("only removes listener once when unsubscribe is called", () => {
+    it("only removes listener once when unsubscribe is called", () => {
       const store = createStore(todos);
       const listenerA = mock.fn();
       const listenerB = mock.fn();
@@ -156,7 +156,7 @@ describe("04-state", () => {
       listenerB.mock.calls.should.have.length(1);
     });
 
-    it.skip("only removes relevant listener when unsubscribe is called", () => {
+    it("only removes relevant listener when unsubscribe is called", () => {
       const store = createStore(todos);
       const listener = mock.fn();
 
@@ -170,7 +170,7 @@ describe("04-state", () => {
       listener.mock.calls.should.have.length(1);
     });
 
-    it.skip("notifies all subscribers about current dispatch regardless if any of them gets unsubscribed in the process", () => {
+    it("notifies all subscribers about current dispatch regardless if any of them gets unsubscribed in the process", () => {
       const store = createStore(todos);
 
       const unsubscribeHandles = [];
@@ -200,7 +200,7 @@ describe("04-state", () => {
       listener3.mock.calls.should.have.length(1);
     });
 
-    it.skip("notifies only subscribers active at the moment of current dispatch", () => {
+    it("notifies only subscribers active at the moment of current dispatch", () => {
       const store = createStore(todos);
 
       const listener1 = mock.fn();
@@ -232,7 +232,7 @@ describe("04-state", () => {
       listener3.mock.calls.should.have.length(1);
     });
 
-    it.skip("uses the last snapshot of subscribers during nested dispatch", () => {
+    it("uses the last snapshot of subscribers during nested dispatch", () => {
       const store = createStore(todos);
 
       const listener1 = mock.fn();
@@ -274,7 +274,7 @@ describe("04-state", () => {
       listener4.mock.calls.should.have.length(1);
     });
 
-    it.skip("provides an up-to-date state when a subscriber is notified", done => {
+    it("provides an up-to-date state when a subscriber is notified", done => {
       const store = createStore(todos, { todos: [] });
       store.subscribe(() => {
         store
@@ -290,7 +290,7 @@ describe("04-state", () => {
       store.dispatch({ type: "ADD_TODO", todo: { id: 1, text: "Hello" } });
     });
 
-    it.skip("does not leak private listeners array", done => {
+    it("does not leak private listeners array", done => {
       const store = createStore(todos, { todos: [] });
       store.subscribe(function() {
         should(this).be.undefined();

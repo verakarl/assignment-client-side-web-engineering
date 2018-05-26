@@ -1,4 +1,4 @@
-import { isPlainObject } from "./utils/is-plain-object";
+import { isPlainObject } from './utils/is-plain-object';
 
 /**
  * Implement a predictable state container (inspired by Redux):
@@ -16,28 +16,47 @@ import { isPlainObject } from "./utils/is-plain-object";
  * 14. Throws if action type is missin or undefined and not if falsy
  */
 export function createStore(reducer, state) {
+	if (typeof reducer !== 'function') {
+		throw 'This reducer is not a function';
+	}
+	console.log(reducer, state);
 
-  if (typeof reducer !== 'function') {
-    throw 'This reducer is not a function';
-  }
-  console.log(reducer, state)
+	const listeners = {};
 
-  const store = reducer;
+	const store = reducer;
 
-  const dispatch = action => {
-    state = reducer(state, action)
-  }
+	const dispatch = (action) => {
+		state = reducer(state, action);
 
-  const subscribe = () => {}
-  const getState = () => state;
+		for (let key in listeners) {
+			if (listeners[key] && listeners[key].unsubscribed) {
+				listeners[key] = undefined;
+			}
+		}
 
-  store.dispatch = dispatch;
-  store.subscribe = subscribe;
-  store.getState = getState;
+		for (let key in listeners) {
+			if (listeners[key]) {
+        listeners[key].fn.bind(undefined)(); // call callback and bind undefined
+      }
+		}
+	};
 
-  return Object.freeze({
-    dispatch,
-    subscribe,
-    getState
-  });
+	const subscribe = (fn) => {
+		const key = Math.random(0, 1000000);
+		console.log(this);
+		listeners[key] = { fn, unsubscribed: false };
+		return () => (listeners[key].unsubscribed = true); // unsubsribe
+	};
+
+	const getState = () => state;
+
+	store.dispatch = dispatch;
+	store.subscribe = subscribe;
+	store.getState = getState;
+
+	return Object.freeze({
+		dispatch,
+		subscribe,
+		getState
+	});
 }
