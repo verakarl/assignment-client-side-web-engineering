@@ -301,7 +301,7 @@ describe("04-state", () => {
   });
 
   describe("actions", () => {
-    it.skip("only accepts plain object actions", () => {
+    it("only accepts plain object actions", () => {
       const store = createStore(todos);
       should.doesNotThrow(() => store.dispatch(unknownAction()));
 

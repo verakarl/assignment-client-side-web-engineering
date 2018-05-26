@@ -18,7 +18,8 @@ import { isPlainObject } from './utils/is-plain-object';
 export function createStore(reducer, state) {
 	if (typeof reducer !== 'function') {
 		throw 'This reducer is not a function';
-	}
+  }	
+
 	console.log(reducer, state);
 
 	const listeners = {};
@@ -26,6 +27,11 @@ export function createStore(reducer, state) {
 	const store = reducer;
 
 	const dispatch = (action) => {
+
+    if (isPlainObject(action) === false) {
+      throw 'This is not a plain object';
+    }
+
 		state = reducer(state, action);
 
 		for (let key in listeners) {
