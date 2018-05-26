@@ -15,4 +15,29 @@ import { isPlainObject } from "./utils/is-plain-object";
  * 13. Recovers from errors
  * 14. Throws if action type is missin or undefined and not if falsy
  */
-export function createStore(reducer, state) {}
+export function createStore(reducer, state) {
+
+  if (typeof reducer !== 'function') {
+    throw 'This reducer is not a function';
+  }
+  console.log(reducer, state)
+
+  const store = reducer;
+
+  const dispatch = action => {
+    state = reducer(state, action)
+  }
+
+  const subscribe = () => {}
+  const getState = () => state;
+
+  store.dispatch = dispatch;
+  store.subscribe = subscribe;
+  store.getState = getState;
+
+  return Object.freeze({
+    dispatch,
+    subscribe,
+    getState
+  });
+}

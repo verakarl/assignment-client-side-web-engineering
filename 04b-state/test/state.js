@@ -30,7 +30,7 @@ const mock = {
 
 describe("04-state", () => {
   describe("store", () => {
-    it.skip("should create a store", () => {
+    it("should create a store", () => {
       const store = createStore(hello);
       const methods = Object.keys(store);
 
@@ -38,19 +38,19 @@ describe("04-state", () => {
       methods.forEach(m => store[m].should.be.a.Function());
     });
 
-    it.skip("should throw if reducer is not a function", () => {
+    it("should throw if reducer is not a function", () => {
       should.throws(() => createStore());
       should.throws(() => createStore("hello"));
       should.throws(() => createStore({}));
       should.doesNotThrow(() => createStore(() => {}));
     });
 
-    it.skip("passes the initial state", () => {
+    it("passes the initial state", () => {
       const store = createStore(noop, { a: 1, b: { c: 2 } });
       store.getState().should.be.deepEqual({ a: 1, b: { c: 2 } });
     });
 
-    it.skip("applies the reducer to the previous state", () => {
+    it("applies the reducer to the previous state", () => {
       const store = createStore(todos, { todos: [] });
       store.getState().should.be.deepEqual({ todos: [] });
 
@@ -70,7 +70,7 @@ describe("04-state", () => {
         });
     });
 
-    it.skip("applies the reducer to the initial state", () => {
+    it("applies the reducer to the initial state", () => {
       const store = createStore(todos, {
         todos: [{ id: 1, text: "First" }]
       });
