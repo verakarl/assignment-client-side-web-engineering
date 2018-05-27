@@ -18,19 +18,21 @@ import { isPlainObject } from './utils/is-plain-object';
 export function createStore(reducer, state) {
 	if (typeof reducer !== 'function') {
 		throw 'This reducer is not a function';
-  }	
-
-	console.log(reducer, state);
+	}
 
 	const listeners = {};
-
 	const store = reducer;
 
 	const dispatch = (action) => {
-
-    if (isPlainObject(action) === false) {
-      throw 'This is not a plain object';
+		if (isPlainObject(action) === false) {
+			throw 'This is not a plain object';
+    } 
+    else if (action.type === undefined) {
+			throw 'Action type is missing';
     }
+    else if (action.type === false || action.type === null || action.type === 0 || action.type === '') {
+			return new Error('Action type is wrong');
+		}
 
 		state = reducer(state, action);
 
@@ -42,16 +44,20 @@ export function createStore(reducer, state) {
 
 		for (let key in listeners) {
 			if (listeners[key]) {
-        listeners[key].fn.bind(undefined)(); // call callback and bind undefined
-      }
+				listeners[key].fn.bind(undefined)(); // call callback and bind undefined
+			}
 		}
 	};
 
 	const subscribe = (fn) => {
-		const key = Math.random(0, 1000000);
-		console.log(this);
-		listeners[key] = { fn, unsubscribed: false };
-		return () => (listeners[key].unsubscribed = true); // unsubsribe
+    // generate random string as a key to store the subscribers (Source for the random key function: https://gist.github.com/6174/6062387)
+		const key = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+
+		listeners[key] = { 
+      fn, 
+      unsubscribed: false 
+    };
+		return () => listeners[key].unsubscribed = true; // unsubscribe
 	};
 
 	const getState = () => state;

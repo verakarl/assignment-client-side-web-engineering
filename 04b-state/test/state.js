@@ -375,24 +375,24 @@ describe("04-state", () => {
     });
   });
   describe("errors", () => {
-    it.skip("recovers from an error within a reducer", () => {
+    it("recovers from an error within a reducer", () => {
       const store = createStore(errorThrowingReducer);
       should.throws(() => store.dispatch(throwError()));
 
       should.throws(() => store.dispatch(unknownAction()));
     });
 
-    it.skip("throws if action type is missing", () => {
+    it("throws if action type is missing", () => {
       const store = createStore(todos);
       should.throws(() => store.dispatch({}));
     });
 
-    it.skip("throws if action type is undefined", () => {
+    it("throws if action type is undefined", () => {
       const store = createStore(todos);
       should.throws(() => store.dispatch({ type: undefined }));
     });
 
-    it.skip("does not throw if action type is falsy", () => {
+    it("does not throw if action type is falsy", () => {
       const store = createStore(todos);
       should.doesNotThrow(() => store.dispatch({ type: false }));
       should.doesNotThrow(() => store.dispatch({ type: 0 }));
