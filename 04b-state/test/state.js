@@ -313,7 +313,7 @@ describe("04-state", () => {
   });
 
   describe("dispatch", () => {
-    it.skip("handles nested dispatches gracefully", () => {
+    it("handles nested dispatches gracefully", () => {
       function foo(state = 0, action) {
         return action.type === "foo" ? 1 : state;
       }
@@ -337,7 +337,7 @@ describe("04-state", () => {
   });
 
   describe("forbidden", () => {
-    it.skip("does not allow dispatch() from within a reducer", () => {
+    it("does not allow dispatch() from within a reducer", () => {
       const store = createStore(dispatchInTheMiddleOfReducer);
 
       should.throws(() =>
@@ -347,7 +347,7 @@ describe("04-state", () => {
       );
     });
 
-    it.skip("does not allow getState() from within a reducer", () => {
+    it("does not allow getState() from within a reducer", () => {
       const store = createStore(getStateInTheMiddleOfReducer);
 
       should.throws(() =>
@@ -355,7 +355,7 @@ describe("04-state", () => {
       );
     });
 
-    it.skip("does not allow subscribe() from within a reducer", () => {
+    it("does not allow subscribe() from within a reducer", () => {
       const store = createStore(subscribeInTheMiddleOfReducer);
 
       should.throws(() =>
@@ -365,7 +365,7 @@ describe("04-state", () => {
       );
     });
 
-    it.skip("does not allow unsubscribe from subscribe() from within a reducer", () => {
+    it("does not allow unsubscribe from subscribe() from within a reducer", () => {
       const store = createStore(unsubscribeInTheMiddleOfReducer);
       const unsubscribe = store.subscribe(() => {});
 
